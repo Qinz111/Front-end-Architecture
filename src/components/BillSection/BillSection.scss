@@ -1,0 +1,76 @@
+.bill-section {
+  .bill-items {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+  }
+
+  .bill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .bill-item-info {
+      flex: 1;
+      min-width: 0;
+
+      .bill-item-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .bill-item-price {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 0;
+      }
+    }
+
+    .bill-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .quantity-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        font-size: 0.75rem;
+      }
+
+      .quantity-display {
+        min-width: 32px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .bill-totals {
+    border-top: 1px solid #dee2e6;
+    padding-top: 1rem;
+  }
+
+  .bill-actions {
+    .btn {
+      font-weight: 500;
+    }
+  }
+}

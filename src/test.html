@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ Thống Quản Lý Nhà Hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .sidebar-item:hover .sidebar-tooltip {
+        display: block;
+      }
+      .order-item:hover {
+        background-color: #f3f4f6;
+        transform: translateY(-2px);
+      }
+      .table-available {
+        background-color: #d1fae5;
+      }
+      .table-occupied {
+        background-color: #fee2e2;
+      }
+      .table-reserved {
+        background-color: #fef3c7;
+      }
+      [data-status="pending"] {
+        border-left: 4px solid #f59e0b;
+      }
+      [data-status="preparing"] {
+        border-left: 4px solid #3b82f6;
+      }
+      [data-status="ready"] {
+        border-left: 4px solid #10b981;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <!-- Main Layout -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- Sidebar -->
+      <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-indigo-800 text-white">
+          <div class="flex items-center justify-center h-16 px-4 bg-indigo-900">
+            <i class="fas fa-utensils text-2xl mr-2"></i>
+            <span class="text-xl font-bold">RestaurantPro</span>
+          </div>
+          <div
+            class="px-4 py-6 flex items-center space-x-3 border-b border-indigo-700"
+          >
+            <div
+              class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center"
+            >
+              <i class="fas fa-user"></i>
+            </div>
+            <div>
+              <p class="font-medium">Nguyễn Văn A</p>
+              <p class="text-xs text-indigo-300">Nhân viên phục vụ</p>
+            </div>
+          </div>
+          <nav class="flex-1 overflow-y-auto">
+            <!-- Nhóm chức năng Nhân viên -->
+            <div class="px-4 pt-4">
+              <p class="text-xs uppercase text-indigo-400 font-semibold mb-2">
+                Nhân viên
+              </p>
+              <div class="space-y-1">
+                <a
+                  href="#"
+                  class="flex items-center px-2 py-2 rounded-lg bg-indigo-700 text-white"
+                >
+                  <i class="fas fa-tv w-6 text-center"></i>
+                  <span class="ml-3">Bàn & Đặt món</span>
+                </a>
+                <a
+                  href="#"
+                  class="flex items-center px-2 py-2 rounded-lg text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                >
+                  <i class="fas fa-exchange-alt w-6 text-center"></i>
+                  <span class="ml-3">Chuyển bàn</span>
+                </a>
+                <a
+                  href="#"
+                  class="flex items-center px-2 py-2 rounded-lg text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                >
+                  <i class="fas fa-cash-register w-6 text-center"></i>
+                  <span class="ml-3">Thanh toán</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Nhóm chức năng Quản trị -->
+            <div class="px-4 pt-6">
+              <p class="text-xs uppercase text-indigo-400 font-semibold mb-2">
+                Quản trị
+              </p>
+              <div class="space-y-1">
+                <a
+                  href="#"
+                  class="flex items-center px-2 py-2 rounded-lg text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                >
+                  <i class="fas fa-users-cog w-6 text-center"></i>
+                  <span class="ml-3">Tài khoản</span>
+                </a>
+                <a
+                  href="#"
+                  class="flex items-center px-2 py-2 rounded-lg text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                >
+                  <i class="fas fa-chair w-6 text-center"></i>
+                  <span class="ml-3">Quản lý bàn</span>
+                </a>
+                <a
+                  href="#"
+                  class="flex items-center px-2 py-2 rounded-lg text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                >
+                  <i class="fas fa-utensils w-6 text-center"></i>
+                  <span class="ml-3">Thực đơn</span>
+                </a>
+                <a
+                  href="#"
+                  class="flex items-center px-2 py-2 rounded-lg text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                >
+                  <i class="fas fa-chart-bar w-6 text-center"></i>
+                  <span class="ml-3">Báo cáo</span>
+                </a>
+                <a
+                  href="#"
+                  class="flex items-center px-2 py-2 rounded-lg text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                >
+                  <i class="fas fa-database w-6 text-center"></i>
+                  <span class="ml-3">Sao lưu</span>
+                </a>
+              </div>
+            </div>
+          </nav>
+          <div class="p-4 border-t border-indigo-700">
+            <a
+              href="#"
+              class="flex items-center px-2 py-2 rounded-lg text-indigo-200 hover:bg-indigo-700 hover:text-white"
+            >
+              <i class="fas fa-cog w-6 text-center"></i>
+              <span class="ml-3">Cài đặt</span>
+            </a>
+            <a
+              href="#"
+              class="flex items-center px-2 py-2 rounded-lg text-rose-200 hover:bg-rose-700 hover:text-white mt-1"
+            >
+              <i class="fas fa-sign-out-alt w-6 text-center"></i>
+              <span class="ml-3">Đăng xuất</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile sidebar button -->
+      <div class="md:hidden fixed bottom-4 right-4 z-50">
+        <button
+          id="mobile-menu-button"
+          class="p-3 rounded-full bg-indigo-600 text-white shadow-lg"
+        >
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="bg-white shadow-sm z-10">
+          <div class="flex items-center justify-between px-4 py-3">
+            <div class="flex items-center">
+              <h1 class="text-xl font-semibold text-gray-800">
+                Quản lý bàn & Đặt món
+              </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+              <button class="p-2 rounded-full hover:bg-gray-100 relative">
+                <i class="fas fa-bell text-gray-600"></i>
+                <span
+                  class="absolute top-0 right-0 w-2 h-2 bg-rose-500 rounded-full"
+                ></span>
+              </button>
+              <button class="p-2 rounded-full hover:bg-gray-100">
+                <i class="fas fa-question-circle text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-4 bg-gray-50">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Danh sách bàn -->
+            <div class="lg:col-span-2">
+              <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div
+                  class="px-4 py-3 border-b border-gray-200 flex justify-between items-center"
+                >
+                  <h2 class="font-semibold text-gray-800">Danh sách bàn</h2>
+                  <div class="flex space-x-2">
+                    <select class="border rounded px-2 py-1 text-sm">
+                      <option>Tất cả khu vực</option>
+                      <option>Tầng 1</option>
+                      <option>Tầng 2</option>
+                      <option>Khu vực VIP</option>
+                    </select>
+                    <div class="relative">
+                      <input
+                        type="text"
+                        placeholder="Tìm bàn..."
+                        class="border rounded pl-8 pr-2 py-1 text-sm w-full"
+                      />
+                      <i
+                        class="fas fa-search absolute left-2 top-2 text-gray-400"
+                      ></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-4">
+                  <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
+                  >
+                    <!-- Bàn mẫu -->
+                    <div
+                      class="table-available rounded-lg border p-3 text-center cursor-pointer hover:shadow-md transition"
+                    >
+                      <div
+                        class="w-full h-16 bg-white rounded mb-2 flex items-center justify-center"
+                      >
+                        <i class="fas fa-utensils text-2xl text-gray-600"></i>
+                      </div>
+                      <p class="font-medium">Bàn 01</p>
+                      <p class="text-xs text-gray-500">4 chỗ • Tầng 1</p>
+                      <span
+                        class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full"
+                        >Trống</span
+                      >
+                    </div>
+
+                    <div
+                      class="table-occupied rounded-lg border p-3 text-center cursor-pointer hover:shadow-md transition"
+                    >
+                      <div
+                        class="w-full h-16 bg-white rounded mb-2 flex items-center justify-center"
+                      >
+                        <i class="fas fa-utensils text-2xl text-gray-600"></i>
+                      </div>
+                      <p class="font-medium">Bàn 02</p>
+                      <p class="text-xs text-gray-500">6 chỗ • Tầng 1</p>
+                      <span
+                        class="text-xs bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full"
+                        >Đang dùng</span
+                      >
+                    </div>
+
+                    <div
+                      class="table-reserved rounded-lg border p-3 text-center cursor-pointer hover:shadow-md transition"
+                    >
+                      <div
+                        class="w-full h-16 bg-white rounded mb-2 flex items-center justify-center"
+                      >
+                        <i class="fas fa-utensils text-2xl text-gray-600"></i>
+                      </div>
+                      <p class="font-medium">Bàn 03</p>
+                      <p class="text-xs text-gray-500">2 chỗ • Tầng 2</p>
+                      <span
+                        class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full"
+                        >Đã đặt trước</span
+                      >
+                    </div>
+
+                    <!-- Thêm các bàn khác -->
+                    <div
+                      class="bg-white rounded-lg border p-3 text-center cursor-pointer hover:shadow-md transition"
+                    >
+                      <div
+                        class="w-full h-16 bg-white rounded mb-2 flex items-center justify-center"
+                      >
+                        <i class="fas fa-utensils text-2xl text-gray-600"></i>
+                      </div>
+                      <p class="font-medium">Bàn 04</p>
+                      <p class="text-xs text-gray-500">8 chỗ • Khu VIP</p>
+                      <span
+                        class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full"
+                        >Trống</span
+                      >
+                    </div>
+
+                    <div
+                      class="table-occupied rounded-lg border p-3 text-center cursor-pointer hover:shadow-md transition"
+                    >
+                      <div
+                        class="w-full h-16 bg-white rounded mb-2 flex items-center justify-center"
+                      >
+                        <i class="fas fa-utensils text-2xl text-gray-600"></i>
+                      </div>
+                      <p class="font-medium">Bàn 05</p>
+                      <p class="text-xs text-gray-500">4 chỗ • Tầng 1</p>
+                      <span
+                        class="text-xs bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full"
+                        >Đang dùng</span
+                      >
+                    </div>
+
+                    <div
+                      class="bg-white rounded-lg border p-3 text-center cursor-pointer hover:shadow-md transition"
+                    >
+                      <div
+                        class="w-full h-16 bg-white rounded mb-2 flex items-center justify-center"
+                      >
+                        <i class="fas fa-utensils text-2xl text-gray-600"></i>
+                      </div>
+                      <p class="font-medium">Bàn 06</p>
+                      <p class="text-xs text-gray-500">6 chỗ • Tầng 2</p>
+                      <span
+                        class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full"
+                        >Trống</span
+                      >
+                    </div>
+
+                    <div
+                      class="table-reserved rounded-lg border p-3 text-center cursor-pointer hover:shadow-md transition"
+                    >
+                      <div
+                        class="w-full h-16 bg-white rounded mb-2 flex items-center justify-center"
+                      >
+                        <i class="fas fa-utensils text-2xl text-gray-600"></i>
+                      </div>
+                      <p class="font-medium">Bàn 07</p>
+                      <p class="text-xs text-gray-500">10 chỗ • Khu VIP</p>
+                      <span
+                        class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full"
+                        >Đã đặt trước</span
+                      >
+                    </div>
+
+                    <div
+                      class="bg-white rounded-lg border p-3 text-center cursor-pointer hover:shadow-md transition"
+                    >
+                      <div
+                        class="w-full h-16 bg-white rounded mb-2 flex items-center justify-center"
+                      >
+                        <i class="fas fa-utensils text-2xl text-gray-600"></i>
+                      </div>
+                      <p class="font-medium">Bàn 08</p>
+                      <p class="text-xs text-gray-500">4 chỗ • Tầng 1</p>
+                      <span
+                        class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full"
+                        >Trống</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Khu vực order -->
+              <div class="bg-white rounded-lg shadow mt-6">
+                <div class="px-4 py-3 border-b border-gray-200">
+                  <h2 class="font-semibold text-gray-800">
+                    Order bàn <span class="font-bold">02</span>
+                  </h2>
+                </div>
+                <div class="p-4">
+                  <!-- Tab menu -->
+                  <div class="border-b border-gray-200">
+                    <nav class="flex -mb-px space-x-4 overflow-x-auto">
+                      <button
+                        class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm border-indigo-500 text-indigo-600"
+                      >
+                        Thực đơn
+                      </button>
+                      <button
+                        class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700"
+                      >
+                        Món yêu thích
+                      </button>
+                      <button
+                        class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700"
+                      >
+                        Combo
+                      </button>
+                    </nav>
+                  </div>
+
+                  <!-- Danh mục món ăn -->
+                  <div class="mt-4">
+                    <div
+                      class="grid grid-cols-4 gap-2 mb-4 overflow-x-auto pb-2"
+                    >
+                      <button
+                        class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm whitespace-nowrap"
+                      >
+                        Tất cả
+                      </button>
+                      <button
+                        class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm whitespace-nowrap"
+                      >
+                        Khai vị
+                      </button>
+                      <button
+                        class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm whitespace-nowrap"
+                      >
+                        Món chính
+                      </button>
+                      <button
+                        class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm whitespace-nowrap"
+                      >
+                        Đồ uống
+                      </button>
+                    </div>
+
+                    <!-- Danh sách món ăn -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <!-- Item mẫu -->
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100 relative">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Food"
+                            alt="Món ăn"
+                            class="w-full h-full object-cover"
+                          />
+                          <button
+                            class="absolute top-2 right-2 w-8 h-8 bg-white rounded-full shadow flex items-center justify-center text-rose-500"
+                          >
+                            <i class="fas fa-heart"></i>
+                          </button>
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Phở bò đặc biệt
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >85.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Thêm các món khác -->
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Food"
+                            alt="Món ăn"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Bún chả Hà Nội
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >75.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Drink"
+                            alt="Đồ uống"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Trà đào cam sả
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >35.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Food"
+                            alt="Món ăn"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Cơm tấm sườn nướng
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >65.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Food"
+                            alt="Món ăn"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Gỏi cuốn tôm thịt
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >45.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Drink"
+                            alt="Đồ uống"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Cà phê sữa đá
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >25.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Food"
+                            alt="Món ăn"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Bánh xèo miền Tây
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >55.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Food"
+                            alt="Món ăn"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Chả cá Lã Vọng
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >120.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition"
+                      >
+                        <div class="h-28 bg-gray-100">
+                          <img
+                            src="https://via.placeholder.com/300x200?text=Drink"
+                            alt="Đồ uống"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div class="p-2">
+                          <h3 class="font-medium text-sm truncate">
+                            Sinh tố bơ
+                          </h3>
+                          <div class="flex justify-between items-center mt-1">
+                            <span class="text-amber-600 font-bold"
+                              >40.000đ</span
+                            >
+                            <button
+                              class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                            >
+                              <i class="fas fa-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sidebar bên phải - Giỏ hàng & Đơn hàng -->
+            <div class="lg:col-span-1">
+              <!-- Giỏ hàng -->
+              <div class="bg-white rounded-lg shadow mb-6">
+                <div class="px-4 py-3 border-b border-gray-200">
+                  <h2 class="font-semibold text-gray-800">Giỏ hàng</h2>
+                </div>
+                <div class="p-4">
+                  <!-- Danh sách món đã chọn -->
+                  <div class="space-y-3 max-h-64 overflow-y-auto">
+                    <div
+                      class="flex items-center justify-between p-2 bg-gray-50 rounded"
+                    >
+                      <div class="flex-1">
+                        <h4 class="font-medium text-sm">Phở bò đặc biệt</h4>
+                        <p class="text-xs text-gray-500">85.000đ</p>
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <button
+                          class="w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center"
+                        >
+                          <i class="fas fa-minus text-xs"></i>
+                        </button>
+                        <span class="w-8 text-center text-sm font-medium"
+                          >1</span
+                        >
+                        <button
+                          class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                        >
+                          <i class="fas fa-plus text-xs"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      class="flex items-center justify-between p-2 bg-gray-50 rounded"
+                    >
+                      <div class="flex-1">
+                        <h4 class="font-medium text-sm">Bún chả Hà Nội</h4>
+                        <p class="text-xs text-gray-500">75.000đ</p>
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <button
+                          class="w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center"
+                        >
+                          <i class="fas fa-minus text-xs"></i>
+                        </button>
+                        <span class="w-8 text-center text-sm font-medium"
+                          >2</span
+                        >
+                        <button
+                          class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                        >
+                          <i class="fas fa-plus text-xs"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      class="flex items-center justify-between p-2 bg-gray-50 rounded"
+                    >
+                      <div class="flex-1">
+                        <h4 class="font-medium text-sm">Trà đào cam sả</h4>
+                        <p class="text-xs text-gray-500">35.000đ</p>
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <button
+                          class="w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center"
+                        >
+                          <i class="fas fa-minus text-xs"></i>
+                        </button>
+                        <span class="w-8 text-center text-sm font-medium"
+                          >1</span
+                        >
+                        <button
+                          class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"
+                        >
+                          <i class="fas fa-plus text-xs"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Tổng tiền -->
+                  <div class="border-t border-gray-200 pt-3 mt-3">
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="text-sm text-gray-600">Tạm tính:</span>
+                      <span class="font-medium">270.000đ</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="text-sm text-gray-600">Thuế VAT (10%):</span>
+                      <span class="font-medium">27.000đ</span>
+                    </div>
+                    <div
+                      class="flex justify-between items-center text-lg font-bold border-t border-gray-200 pt-2"
+                    >
+                      <span>Tổng cộng:</span>
+                      <span class="text-indigo-600">297.000đ</span>
+                    </div>
+                  </div>
+
+                  <!-- Nút thanh toán -->
+                  <div class="mt-4 space-y-2">
+                    <button
+                      class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-indigo-700 transition"
+                    >
+                      <i class="fas fa-paper-plane mr-2"></i>
+                      Gửi đơn hàng
+                    </button>
+                    <button
+                      class="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-300 transition"
+                    >
+                      <i class="fas fa-print mr-2"></i>
+                      In hóa đơn
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Đơn hàng đang xử lý -->
+              <div class="bg-white rounded-lg shadow">
+                <div class="px-4 py-3 border-b border-gray-200">
+                  <h2 class="font-semibold text-gray-800">
+                    Đơn hàng đang xử lý
+                  </h2>
+                </div>
+                <div class="p-4">
+                  <div class="space-y-3">
+                    <!-- Đơn hàng mẫu -->
+                    <div class="border rounded-lg p-3" data-status="preparing">
+                      <div class="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 class="font-medium text-sm">Bàn 02 - Đơn #001</h4>
+                          <p class="text-xs text-gray-500">14:30 • 3 món</p>
+                        </div>
+                        <span
+                          class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
+                          >Đang chế biến</span
+                        >
+                      </div>
+                      <div class="text-xs text-gray-600 space-y-1">
+                        <p>• Phở bò đặc biệt x1</p>
+                        <p>• Bún chả Hà Nội x2</p>
+                        <p>• Trà đào cam sả x1</p>
+                      </div>
+                      <div class="flex space-x-2 mt-3">
+                        <button
+                          class="flex-1 bg-green-100 text-green-700 py-1 px-2 rounded text-xs font-medium"
+                        >
+                          Hoàn thành
+                        </button>
+                        <button
+                          class="flex-1 bg-gray-100 text-gray-700 py-1 px-2 rounded text-xs font-medium"
+                        >
+                          Chi tiết
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="border rounded-lg p-3" data-status="pending">
+                      <div class="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 class="font-medium text-sm">Bàn 05 - Đơn #002</h4>
+                          <p class="text-xs text-gray-500">14:25 • 2 món</p>
+                        </div>
+                        <span
+                          class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full"
+                          >Chờ xử lý</span
+                        >
+                      </div>
+                      <div class="text-xs text-gray-600 space-y-1">
+                        <p>• Cơm tấm sườn nướng x1</p>
+                        <p>• Cà phê sữa đá x1</p>
+                      </div>
+                      <div class="flex space-x-2 mt-3">
+                        <button
+                          class="flex-1 bg-blue-100 text-blue-700 py-1 px-2 rounded text-xs font-medium"
+                        >
+                          Bắt đầu
+                        </button>
+                        <button
+                          class="flex-1 bg-gray-100 text-gray-700 py-1 px-2 rounded text-xs font-medium"
+                        >
+                          Chi tiết
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="border rounded-lg p-3" data-status="ready">
+                      <div class="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 class="font-medium text-sm">Bàn 03 - Đơn #003</h4>
+                          <p class="text-xs text-gray-500">14:20 • 1 món</p>
+                        </div>
+                        <span
+                          class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full"
+                          >Sẵn sàng</span
+                        >
+                      </div>
+                      <div class="text-xs text-gray-600 space-y-1">
+                        <p>• Gỏi cuốn tôm thịt x1</p>
+                      </div>
+                      <div class="flex space-x-2 mt-3">
+                        <button
+                          class="flex-1 bg-indigo-100 text-indigo-700 py-1 px-2 rounded text-xs font-medium"
+                        >
+                          Phục vụ
+                        </button>
+                        <button
+                          class="flex-1 bg-gray-100 text-gray-700 py-1 px-2 rounded text-xs font-medium"
+                        >
+                          Chi tiết
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div
+      id="mobile-sidebar"
+      class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"
+    >
+      <div
+        class="fixed inset-y-0 left-0 w-64 bg-indigo-800 text-white transform -translate-x-full transition-transform duration-300"
+      >
+        <!-- Mobile sidebar content (same as desktop) -->
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      // Mobile sidebar toggle
+      document
+        .getElementById("mobile-menu-button")
+        .addEventListener("click", function () {
+          const sidebar = document.getElementById("mobile-sidebar");
+          sidebar.classList.toggle("hidden");
+        });
+
+      // Close mobile sidebar when clicking overlay
+      document
+        .getElementById("mobile-sidebar")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            this.classList.add("hidden");
+          }
+        });
+
+      // Table selection
+      document
+        .querySelectorAll(".table-available, .table-occupied, .table-reserved")
+        .forEach((table) => {
+          table.addEventListener("click", function () {
+            // Remove active state from all tables
+            document
+              .querySelectorAll(
+                ".table-available, .table-occupied, .table-reserved"
+              )
+              .forEach((t) => {
+                t.classList.remove("ring-2", "ring-indigo-500");
+              });
+            // Add active state to clicked table
+            this.classList.add("ring-2", "ring-indigo-500");
+          });
+        });
+
+      // Food item selection
+      document
+        .querySelectorAll(".border.rounded-lg.overflow-hidden.cursor-pointer")
+        .forEach((item) => {
+          item.addEventListener("click", function () {
+            // Add to cart logic here
+            console.log("Added to cart:", this.querySelector("h3").textContent);
+          });
+        });
+
+      // Category filter
+      document
+        .querySelectorAll(".grid.grid-cols-4 button")
+        .forEach((button) => {
+          button.addEventListener("click", function () {
+            // Remove active state from all buttons
+            document
+              .querySelectorAll(".grid.grid-cols-4 button")
+              .forEach((b) => {
+                b.classList.remove("bg-indigo-100", "text-indigo-800");
+                b.classList.add("bg-gray-100", "text-gray-800");
+              });
+            // Add active state to clicked button
+            this.classList.remove("bg-gray-100", "text-gray-800");
+            this.classList.add("bg-indigo-100", "text-indigo-800");
+          });
+        });
+
+      // Tab switching
+      document.querySelectorAll("nav button").forEach((button) => {
+        button.addEventListener("click", function () {
+          // Remove active state from all tabs
+          document.querySelectorAll("nav button").forEach((b) => {
+            b.classList.remove("border-indigo-500", "text-indigo-600");
+            b.classList.add("border-transparent", "text-gray-500");
+          });
+          // Add active state to clicked tab
+          this.classList.remove("border-transparent", "text-gray-500");
+          this.classList.add("border-indigo-500", "text-indigo-600");
+        });
+      });
+
+      // Quantity controls
+      document.querySelectorAll(".w-6.h-6.rounded-full").forEach((button) => {
+        button.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const quantitySpan = this.parentElement.querySelector("span");
+          let quantity = parseInt(quantitySpan.textContent);
+
+          if (this.querySelector(".fa-plus")) {
+            quantity++;
+          } else if (this.querySelector(".fa-minus") && quantity > 0) {
+            quantity--;
+          }
+
+          quantitySpan.textContent = quantity;
+        });
+      });
+
+      // Order status buttons
+      document.querySelectorAll("[data-status] button").forEach((button) => {
+        button.addEventListener("click", function () {
+          const orderItem = this.closest("[data-status]");
+          if (this.textContent.includes("Hoàn thành")) {
+            orderItem.remove();
+          } else if (this.textContent.includes("Bắt đầu")) {
+            orderItem.setAttribute("data-status", "preparing");
+            const statusSpan = orderItem.querySelector("span");
+            statusSpan.textContent = "Đang chế biến";
+            statusSpan.className =
+              "text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full";
+            this.textContent = "Hoàn thành";
+            this.className =
+              "flex-1 bg-green-100 text-green-700 py-1 px-2 rounded text-xs font-medium";
+          } else if (this.textContent.includes("Phục vụ")) {
+            orderItem.remove();
+          }
+        });
+      });
+
+      // Search functionality
+      document
+        .querySelector('input[placeholder="Tìm bàn..."]')
+        .addEventListener("input", function () {
+          const searchTerm = this.value.toLowerCase();
+          document
+            .querySelectorAll(
+              ".table-available, .table-occupied, .table-reserved, .bg-white.rounded-lg.border"
+            )
+            .forEach((table) => {
+              const tableName = table
+                .querySelector("p.font-medium")
+                .textContent.toLowerCase();
+              if (tableName.includes(searchTerm)) {
+                table.style.display = "block";
+              } else {
+                table.style.display = "none";
+              }
+            });
+        });
+
+      // Area filter
+      document.querySelector("select").addEventListener("change", function () {
+        const selectedArea = this.value;
+        document
+          .querySelectorAll(
+            ".table-available, .table-occupied, .table-reserved, .bg-white.rounded-lg.border"
+          )
+          .forEach((table) => {
+            const tableArea = table.querySelector("p.text-xs").textContent;
+            if (
+              selectedArea === "Tất cả khu vực" ||
+              tableArea.includes(selectedArea)
+            ) {
+              table.style.display = "block";
+            } else {
+              table.style.display = "none";
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
